@@ -1,58 +1,105 @@
-// app/assets/create/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createAsset } from "@/lib/data";
-import { getAccountId, connectWallet } from "@/lib/NearWallet";
 import { useRouter } from "next/navigation";
 
 export default function CreateAssetPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [accountId, setAccountId] = useState<string | null>(null);
-  const router = useRouter();
+  const [image, setImage] = useState("");
+  const [events, setEvents] = useState([{ date: "", title: "", description: "" }]);
 
-  useEffect(() => {
-    getAccountId().then(setAccountId).catch(() => setAccountId(null));
-  }, []);
+  const handleEventChange = (index: number, field: string, value: string) => {
+    const updatedEvents = [...events];
+    (updatedEvents[index] as any)[field] = value;
+    setEvents(updatedEvents);
+  };
 
-  if (!accountId) {
-    return (
-      <main className="p-6 text-center">
-        <p className="mb-4">Connect your wallet to create an asset.</p>
-        <button onClick={() => connectWallet()} className="px-4 py-2 bg-blue-600 rounded text-white">Connect Wallet</button>
-      </main>
-    );
-  }
+  const addEvent = () => {
+    setEvents([...events, { date: "", title: "", description: "" }]);
+  };
 
-  const submit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const asset = createAsset({ name, description });
-    router.push(`/assets/${asset.id}`);
+
+    // Call createAsset without providing `id`
+    const newAsset = createAsset({
+      name,
+      description,
+      image,
+      events,
+    });
+
+    // Redirect to the asset’s page
+    router.push(`/assets/${newAsset.id}`);
   };
 
   return (
-    <main className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Create Asset</h1>
-      <form onSubmit={submit} className="space-y-4">
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Create New Asset</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
-          className="w-full p-3 rounded bg-slate-800"
-          placeholder="Asset name"
+          type="text"
+          placeholder="Asset Name"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full p-2 border rounded"
           required
         />
         <textarea
-          className="w-full p-3 rounded bg-slate-800"
-          placeholder="Short description"
+          placeholder="Description"
           value={description}
-          onChange={e => setDescription(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-2 border rounded"
           required
         />
-        <div className="flex gap-3">
-          <button type="submit" className="px-4 py-2 bg-green-600 rounded text-white">Create</button>
-        </div>
+        <input
+          type="text"
+          placeholder="Image URL"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          className="w-full p-2 border rounded"
+          required
+        />
+
+        <h2 className="font-semibold">Events</h2>
+        {events.map((event, index) => (
+          <div key={index} className="space-y-2 border p-2 rounded">
+            <input
+              type="text"
+              placeholder="Date"
+              value={event.date}
+              onChange={(e) => handleEventChange(index, "date", e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Title"
+              value={event.title}
+              onChange={(e) => handleEventChange(index, "title", e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
+            <textarea
+              placeholder="Description"
+              value={event.description}
+              onChange={(e) => handleEventChange(index, "description", e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+        ))}
+        <button type="button" onClick={addEvent} className="px-4 py-2 bg-gray-200 rounded">
+          + Add Event
+        </button>
+
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
+          Create Asset
+        </button>
       </form>
-    </main>
+    </div>
   );
 }
