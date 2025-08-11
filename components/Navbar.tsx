@@ -1,57 +1,64 @@
-// lib/NearWallet.ts
-import { setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
-import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+"use client";
 
-let selector: WalletSelector | null = null;
-let accountId: string | null = null;
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { initNear, connectWallet, disconnectWallet, getAccountId } from "@/lib/NearWallet";
 
-export async function initNear() {
-  if (!selector) {
-    selector = await setupWalletSelector({
-      network: "testnet",
-      modules: [setupMyNearWallet()],
-    });
+export default function Navbar() {
+  const [account, setAccount] = useState<string | null>(null);
 
-    const wallet = await selector.wallet();
-    const accounts = await wallet.getAccounts();
-    accountId = accounts.length > 0 ? accounts[0].accountId : null;
-
-    // Save to localStorage for persistence
-    if (accountId) {
-      localStorage.setItem("near_account_id", accountId);
+  useEffect(() => {
+    async function loadAccount() {
+      await initNear();
+      setAccount(getAccountId());
     }
-  } else {
-    // If already initialized, just get from storage
-    accountId = localStorage.getItem("near_account_id");
-  }
-}
+    loadAccount();
+  }, []);
 
-export async function connectWallet() {
-  if (!selector) {
-    await initNear();
+  async function handleConnect() {
+    await connectWallet();
+    setAccount(getAccountId());
   }
-  const wallet = await selector!.wallet();
-  await wallet.signIn({
-    contractId: "your-contract.testnet", // Replace with your NEAR contract
-  });
-  const accounts = await wallet.getAccounts();
-  accountId = accounts.length > 0 ? accounts[0].accountId : null;
 
-  // Save login
-  if (accountId) {
-    localStorage.setItem("near_account_id", accountId);
+  async function handleDisconnect() {
+    await disconnectWallet();
+    setAccount(null);
   }
-}
 
-export async function disconnectWallet() {
-  if (selector) {
-    const wallet = await selector.wallet();
-    await wallet.signOut();
-  }
-  accountId = null;
-  localStorage.removeItem("near_account_id");
-}
+  return (
+    <nav className="bg-gray-900 text-white px-6 py-4 flex items-center justify-between">
+      <div className="flex items-center gap-6">
+        <Link href="/" className="font-bold text-lg">
+          Novastro Gallery
+        </Link>
+        <Link href="/gallery" className="hover:underline">
+          Gallery
+        </Link>
+        <Link href="/assets/create" className="hover:underline">
+          Create Asset
+        </Link>
+      </div>
 
-export function getAccountId() {
-  return accountId || localStorage.getItem("near_account_id");
+      <div>
+        {account ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-300">Hello, {account}</span>
+            <button
+              onClick={handleDisconnect}
+              className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded"
+            >
+              Disconnect
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={handleConnect}
+            className="bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded"
+          >
+            Connect Wallet
+          </button>
+        )}
+      </div>
+    </nav>
+  );
 }
