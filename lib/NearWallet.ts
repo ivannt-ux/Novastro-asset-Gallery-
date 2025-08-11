@@ -1,9 +1,12 @@
 // lib/NearWallet.ts
 import { setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
-import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+import { setupModal, WalletSelectorModal } from "@near-wallet-selector/modal-ui";
+import { setupNearWallet } from "@near-wallet-selector/near-wallet";
+import { providers } from "near-api-js";
 
 let selector: WalletSelector | null = null;
-let accountId: string | null = null;
+let modal: WalletSelectorModal | null = null;
+let wallet: any = null;
 
 /**
  * Initialize NEAR wallet selector
@@ -12,55 +15,45 @@ export async function initNear() {
   if (!selector) {
     selector = await setupWalletSelector({
       network: "testnet",
-      modules: [setupMyNearWallet()],
+      modules: [setupNearWallet()],
     });
 
-    const wallet = await selector.wallet();
-    const accounts = await wallet.getAccounts();
-    accountId = accounts.length > 0 ? accounts[0].accountId : null;
-
-    if (accountId) {
-      localStorage.setItem("near_account_id", accountId);
-    }
-  } else {
-    accountId = localStorage.getItem("near_account_id");
+    modal = setupModal(selector, { contractId: "example-contract.testnet" });
   }
+  return selector;
 }
 
 /**
- * Connect wallet
+ * Opens wallet selector modal for connection
  */
 export async function connectWallet() {
-  if (!selector) {
-    await initNear();
-  }
-  const wallet = await selector!.wallet();
-  await wallet.signIn({
-    contractId: "your-contract.testnet", // Replace with your NEAR contract
-  });
-  const accounts = await wallet.getAccounts();
-  accountId = accounts.length > 0 ? accounts[0].accountId : null;
-
-  if (accountId) {
-    localStorage.setItem("near_account_id", accountId);
-  }
+  if (!selector) await initNear();
+  if (!modal) throw new Error("Wallet selector modal not initialized");
+  modal.show();
 }
 
 /**
- * Disconnect wallet
+ * Disconnects the current wallet
  */
 export async function disconnectWallet() {
-  if (selector) {
-    const wallet = await selector.wallet();
-    await wallet.signOut();
-  }
-  accountId = null;
-  localStorage.removeItem("near_account_id");
+  if (!wallet) return;
+  await wallet.signOut();
+  wallet = null;
 }
 
 /**
- * Get current account ID
+ * Returns the currently connected account ID
  */
-export function getAccountId() {
-  return accountId || localStorage.getItem("near_account_id");
+export async function getAccountId(): Promise<string | null> {
+  if (!selector) await initNear();
+  const accounts = selector?.store?.getState()?.accounts || [];
+  const activeAccount = accounts.find((a: any) => a.active);
+  return activeAccount ? activeAccount.accountId : null;
+}
+
+/**
+ * Get NEAR JSON-RPC provider
+ */
+export function getProvider() {
+  return new providers.JsonRpcProvider({ url: "https://rpc.testnet.near.org" });
 }
