@@ -9,20 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.1",
     "@near-wallet-selector/core": "^8.9.1",
     "@near-wallet-selector/modal-ui": "^8.9.1",
     "@near-wallet-selector/near-wallet": "^8.9.1",
-    "near-api-js": "^3.0.3"
-    "clsx": "^2.0.0",
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "tailwindcss": "^3.4.4"
+    "near-api-js": "^3.0.3",
+    "next": "14.2.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.4.1",
+    "postcss": "8.4.31",
+    "autoprefixer": "10.4.16",
+    "clsx": "^2.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.27",
-    "typescript": "^5.2.2"
+    "typescript": "5.3.3",
+    "@types/node": "20.10.5",
+    "@types/react": "18.2.45",
+    "@types/react-dom": "18.2.17"
   }
 }
