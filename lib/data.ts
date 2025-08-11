@@ -1,3 +1,4 @@
+// lib/data.ts
 export interface Asset {
   id: string;
   name: string;
@@ -6,7 +7,8 @@ export interface Asset {
   events: { date: string; title: string; description: string }[];
 }
 
-export const mockAssets: Asset[] = [
+// Mock database for now
+let assets: Asset[] = [
   {
     id: "1",
     name: "Vintage Rolex",
@@ -30,3 +32,23 @@ export const mockAssets: Asset[] = [
     ],
   },
 ];
+
+// Get all assets
+export function getAllAssets(): Asset[] {
+  return assets;
+}
+
+// Get asset by ID
+export function getAssetById(id: string): Asset | undefined {
+  return assets.find((asset) => asset.id === id);
+}
+
+// Create new asset with auto-generated ID
+export function createAsset(assetData: Omit<Asset, "id">): Asset {
+  const newAsset: Asset = {
+    id: (assets.length + 1).toString(), // Simple incremental ID
+    ...assetData,
+  };
+  assets.push(newAsset);
+  return newAsset;
+}
