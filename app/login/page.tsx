@@ -10,15 +10,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // on mount try to see if already connected
-    getAccountId().then(setAccountId).catch(() => setAccountId(null));
+    // Check if already connected on mount
+    const id = getAccountId(); // synchronous now
+    setAccountId(id);
   }, []);
 
   const handleConnect = async () => {
     setLoading(true);
     try {
       await connectWallet(); // opens selector modal
-      const id = await getAccountId();
+      const id = getAccountId(); // now synchronous
       setAccountId(id);
     } catch (err) {
       console.error("connect error", err);
@@ -45,27 +46,5 @@ export default function LoginPage() {
 
       {!accountId ? (
         <>
-          <p className="mb-4 text-slate-300">Connect your NEAR wallet (modal will open in-app).</p>
-          <button
-            onClick={handleConnect}
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 rounded text-white disabled:opacity-60"
-          >
-            {loading ? "Opening..." : "Connect NEAR Wallet"}
-          </button>
-        </>
-      ) : (
-        <>
-          <p className="mb-4">Connected as <span className="font-medium">{accountId}</span></p>
-          <button
-            onClick={handleDisconnect}
-            disabled={loading}
-            className="px-4 py-2 bg-red-600 rounded text-white disabled:opacity-60"
-          >
-            Disconnect
-          </button>
-        </>
-      )}
-    </main>
-  );
-}
+          <p className="mb-4 text-slate-300">
+            Connect your NEAR wallet (modal will open in
