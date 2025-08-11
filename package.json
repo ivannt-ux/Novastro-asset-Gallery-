@@ -10,21 +10,22 @@
   },
   "dependencies": {
     "@near-wallet-selector/core": "^8.10.2",
+    "@near-wallet-selector/near-wallet": "^8.9.1",
     "@near-wallet-selector/modal-ui": "^8.10.2",
-    "@near-wallet-selector/near-wallet": "^8.10.2",
-    "near-api-js": "^5.0.1",
-    "next": "14.2.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "3.4.1",
-    "postcss": "8.4.31",
-    "autoprefixer": "10.4.16",
-    "clsx": "^2.0.0"
+    "near-api-js": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "13.4.19",
+    "typescript": "^5.2.2",
+    "tailwindcss": "^3.3.3",
+    "postcss": "^8.4.30",
+    "autoprefixer": "^10.4.16",
+    "clsx": "^2.0.0",
+    "date-fns": "^2.30.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "typescript": "5.3.3",
-    "@types/node": "20.10.5",
-    "@types/react": "18.2.45",
-    "@types/react-dom": "18.2.17"
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.7"
   }
 }
