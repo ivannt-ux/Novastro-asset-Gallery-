@@ -1,3 +1,10 @@
+// app/login/page.tsx
+"use client";
+
+import { useEffect, useState } from "react"; // ✅ import hooks
+import { connectWallet, getAccountId, disconnectWallet } from "@/lib/NearWallet";
+import "@near-wallet-selector/modal-ui/styles.css";
+
 export default function LoginPage() {
   const [accountId, setAccountId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -31,10 +38,10 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ return is still inside the component function
   return (
     <main className="p-6 flex flex-col items-center">
       <h1 className="text-2xl font-bold mb-4">Wallet</h1>
+
       {!accountId ? (
         <>
           <p className="mb-4 text-slate-300">Connect your NEAR wallet (modal will open in-app).</p>
@@ -48,9 +55,7 @@ export default function LoginPage() {
         </>
       ) : (
         <>
-          <p className="mb-4">
-            Connected as <span className="font-medium">{accountId}</span>
-          </p>
+          <p className="mb-4">Connected as <span className="font-medium">{accountId}</span></p>
           <button
             onClick={handleDisconnect}
             disabled={loading}
