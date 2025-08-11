@@ -1,82 +1,57 @@
-"use client";
+// lib/NearWallet.ts
+import { setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { WalletSelectorModal } from "@near-wallet-selector/modal-ui";
-import { useEffect, useState } from "react";
-import { initNearWallet } from "@/lib/NearWallet";
+let selector: WalletSelector | null = null;
+let accountId: string | null = null;
 
-export default function Navbar() {
-  const pathname = usePathname();
-  const [selector, setSelector] = useState<any>(null);
-  const [wallet, setWallet] = useState<any>(null);
-  const [accountId, setAccountId] = useState<string | null>(null);
+export async function initNear() {
+  if (!selector) {
+    selector = await setupWalletSelector({
+      network: "testnet",
+      modules: [setupMyNearWallet()],
+    });
 
-  useEffect(() => {
-    async function initWallet() {
-      const { selector, wallet } = await initNearWallet();
-      setSelector(selector);
-      setWallet(wallet);
+    const wallet = await selector.wallet();
+    const accounts = await wallet.getAccounts();
+    accountId = accounts.length > 0 ? accounts[0].accountId : null;
 
-      const accounts = await wallet?.getAccounts();
-      if (accounts?.length > 0) {
-        setAccountId(accounts[0].accountId);
-      }
+    // Save to localStorage for persistence
+    if (accountId) {
+      localStorage.setItem("near_account_id", accountId);
     }
-    initWallet();
-  }, []);
+  } else {
+    // If already initialized, just get from storage
+    accountId = localStorage.getItem("near_account_id");
+  }
+}
 
-  const handleSignIn = async () => {
-    const modal = new WalletSelectorModal(selector, { contractId: "example.testnet" });
-    modal.show();
-  };
+export async function connectWallet() {
+  if (!selector) {
+    await initNear();
+  }
+  const wallet = await selector!.wallet();
+  await wallet.signIn({
+    contractId: "your-contract.testnet", // Replace with your NEAR contract
+  });
+  const accounts = await wallet.getAccounts();
+  accountId = accounts.length > 0 ? accounts[0].accountId : null;
 
-  const handleSignOut = async () => {
-    if (wallet) {
-      await wallet.signOut();
-      setAccountId(null);
-    }
-  };
+  // Save login
+  if (accountId) {
+    localStorage.setItem("near_account_id", accountId);
+  }
+}
 
-  return (
-    <nav className="flex items-center justify-between px-6 py-4 bg-gray-900 text-white shadow-lg">
-      <div className="flex items-center space-x-6">
-        <Link href="/" className="text-2xl font-bold tracking-wide">
-          Novastro
-        </Link>
-        <Link
-          href="/gallery"
-          className={`hover:text-teal-400 ${pathname === "/gallery" ? "text-teal-300" : ""}`}
-        >
-          Gallery
-        </Link>
-        <Link
-          href="/login"
-          className={`hover:text-teal-400 ${pathname === "/login" ? "text-teal-300" : ""}`}
-        >
-          Login
-        </Link>
-      </div>
-      <div>
-        {accountId ? (
-          <div className="flex items-center space-x-4">
-            <span className="bg-gray-800 px-3 py-1 rounded-lg">{accountId}</span>
-            <button
-              onClick={handleSignOut}
-              className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg"
-            >
-              Sign Out
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={handleSignIn}
-            className="bg-teal-500 hover:bg-teal-600 px-3 py-1 rounded-lg"
-          >
-            Connect Wallet
-          </button>
-        )}
-      </div>
-    </nav>
-  );
+export async function disconnectWallet() {
+  if (selector) {
+    const wallet = await selector.wallet();
+    await wallet.signOut();
+  }
+  accountId = null;
+  localStorage.removeItem("near_account_id");
+}
+
+export function getAccountId() {
+  return accountId || localStorage.getItem("near_account_id");
 }
