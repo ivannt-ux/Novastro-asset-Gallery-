@@ -1,15 +1,36 @@
-import { setupWalletSelector } from "@near-wallet-selector/core";
-import { setupModal } from "@near-wallet-selector/modal-ui";
-import { setupNearWallet } from "@near-wallet-selector/my-near-wallet";
+// lib/NearWallet.ts
+import { setupWalletSelector, WalletSelector } from "@near-wallet-selector/core";
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
-export async function initNearWallet() {
-  const selector = await setupWalletSelector({
-    network: "testnet",
-    modules: [setupMyNearWallet()],
-  });
+let selector: WalletSelector | null = null;
+let accountId: string | null = null;
 
-  const modal = setupModal(selector, { contractId: "example.testnet" });
-
+// Connect the wallet
+export async function connectWallet() {
+  if (!selector) {
+    selector = await setupWalletSelector({
+      network: "testnet",
+      modules: [setupMyNearWallet()],
+    });
+  }
   const wallet = await selector.wallet();
-  return { selector, modal, wallet };
+  await wallet.signIn({
+    contractId: "your-contract.testnet", // replace with your contract
+  });
+  const accounts = await wallet.getAccounts();
+  accountId = accounts.length > 0 ? accounts[0].accountId : null;
+}
+
+// Disconnect the wallet
+export async function disconnectWallet() {
+  if (selector) {
+    const wallet = await selector.wallet();
+    await wallet.signOut();
+    accountId = null;
+  }
+}
+
+// Get the current account ID
+export function getAccountId() {
+  return accountId;
 }
