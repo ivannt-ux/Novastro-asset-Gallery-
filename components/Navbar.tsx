@@ -10,7 +10,7 @@ export default function Navbar() {
   useEffect(() => {
     async function loadAccount() {
       await initNear();
-      const accountId = await getAccountId(); // Resolve the promise
+      const accountId = await getAccountId();
       setAccount(accountId);
     }
     loadAccount();
@@ -18,7 +18,7 @@ export default function Navbar() {
 
   async function handleConnect() {
     await connectWallet();
-    const accountId = await getAccountId(); // Resolve the promise
+    const accountId = await getAccountId();
     setAccount(accountId);
   }
 
@@ -53,3 +53,14 @@ export default function Navbar() {
             </button>
           </div>
         ) : (
+          <button
+            onClick={handleConnect}
+            className="bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded"
+          >
+            Connect Wallet
+          </button>
+        )}
+      </div>
+    </nav>
+  );
+}
