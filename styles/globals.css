@@ -7,7 +7,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Montserrat', sans-serif; /* Montserrat font with bold weights */
+  font-family: 'Montserrat', sans-serif; /* Montserrat with bold weights */
   background-color: #0f172a; /* Navy black */
   color: #e2e8f0; /* Light gray text */
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADYSURBVHgBjZJBEsMgDARtP7/8/P+AAJ8AhG6v7u46uS+Z2wZsaU2VmTVuLl6L9pIb+9dK8bMyF4zsSMmY8nO8/DCCGS7Gws9KEZ8uL4GCgQoxJg6VN+32rL6T9eRYbCaKfKjOG1fpiXJuWqVYxppb6DcmhJObaxBBUjtM+ae36/4nD6Xj0J7+nxX0D4iHMM/DuYoQ6u+v9fY5GfX0mAwEtsuLs3X3em4zN9Xs5aoqV/n9T5J1LiXwDA4P34ynQJAAAAAElFTkSuQmCC'); /* Subtle texture */
@@ -56,7 +56,7 @@ a {
 
 /* Navbar styles */
 .navbar {
-  @apply bg-gray-900 shadow-md px-6 py-6 mt-6 flex justify-around items-center sticky top-0 z-50;
+  @apply bg-gray-900 shadow-md px-6 py-6 mt-8 flex items-center justify-between sticky top-0 z-50;
 }
 
 .navbar-title {
