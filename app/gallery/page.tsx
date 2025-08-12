@@ -1,4 +1,3 @@
-// app/gallery/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,12 +11,15 @@ export default function GalleryPage() {
   const [accountId, setAccountId] = useState<string | null>(null);
 
   useEffect(() => {
-    const a = getAccountId(); // synchronous call now
-    setAccountId(a);
-    if (a) {
-      setAssets(getAllAssets());
-    }
-  }, []);
+    (async () => {
+      const a = await getAccountId(); // Resolve the promise
+      setAccountId(a);
+      if (a) {
+        const fetchedAssets = await getAllAssets(); // Assume getAllAssets is async
+        setAssets(fetchedAssets);
+      }
+    })();
+  }, []); // Empty dependency array, runs once on mount
 
   if (!accountId) {
     return (
