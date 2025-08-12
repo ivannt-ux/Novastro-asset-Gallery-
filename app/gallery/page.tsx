@@ -28,10 +28,31 @@ export default function GalleryPage() {
     loadData();
   }, []);
 
+  // Shared SVG component
+  const LogoGraphic = () => (
+    <div className="w-32 h-32 mx-auto mb-4">
+      <svg viewBox="0 0 100 100" className="w-full h-full">
+        <path
+          d="M10 10 Q50 0 90 10 Q70 50 90 90 Q50 100 10 90 Q30 50 10 10"
+          fill="none"
+          stroke="url(#gradient)"
+          strokeWidth="10"
+        />
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: "#9333EA" }} />
+            <stop offset="100%" style={{ stopColor: "#A855F7" }} />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  );
+
   if (!accountId) {
     return (
       <main className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
         <div className="text-center max-w-md">
+          <LogoGraphic />
           <h1 className="text-4xl font-bold mb-4 text-purple-400">
             Novastro Provenance Gallery
           </h1>
@@ -55,13 +76,16 @@ export default function GalleryPage() {
   return (
     <main className="min-h-screen bg-gray-900 text-white p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-purple-400">
-            Novastro Provenance Gallery
-          </h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 text-center sm:text-left">
+          <div>
+            <LogoGraphic />
+            <h1 className="text-4xl font-bold text-purple-400">
+              Novastro Provenance Gallery
+            </h1>
+          </div>
           <Link
             href="/assets/create"
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mt-4 sm:mt-0"
           >
             Create Asset
           </Link>
