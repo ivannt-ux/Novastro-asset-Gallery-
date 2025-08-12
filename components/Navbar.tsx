@@ -42,26 +42,28 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-gray-900 text-white px-6 py-4 shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="font-bold text-2xl text-purple-400">
+    <nav className="navbar bg-gray-900 text-white shadow-lg animate-fade-in">
+      <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="navbar-title text-sky-400">
             Novastro
           </Link>
-          <Link href="/gallery" className="hover:text-purple-400 transition duration-300">
-            Gallery
-          </Link>
-          <Link href="/assets/create" className="hover:text-purple-400 transition duration-300">
-            Create Asset
-          </Link>
+          <div className="navbar-links">
+            <Link href="/gallery" className="navbar-link">
+              Gallery
+            </Link>
+            <Link href="/assets/create" className="navbar-link">
+              Create Asset
+            </Link>
+          </div>
         </div>
         <div>
           {account ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-300">Hello, {account}</span>
+            <div className="flex items-center gap-6">
+              <span className="text-base text-gray-300">Hello, {account}</span>
               <button
                 onClick={handleDisconnect}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg transition duration-300"
+                className="btn btn-secondary"
               >
                 Disconnect
               </button>
@@ -69,8 +71,8 @@ export default function Navbar() {
           ) : (
             <button
               onClick={handleConnect}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300"
-              >
+              className="btn btn-primary"
+            >
               Connect Wallet
             </button>
           )}
