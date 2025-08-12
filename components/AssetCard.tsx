@@ -1,4 +1,4 @@
-import { Asset } from "@/lib/types"; // Define an Asset type if not already present
+import { Asset } from "@/lib/types";
 
 interface AssetCardProps {
   asset: Asset;
