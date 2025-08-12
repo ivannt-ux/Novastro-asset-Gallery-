@@ -3,27 +3,26 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="hero bg-gray-900">
-      <div className="text-center space-y-12 py-16 px-4">
-        <h1 className="hero-title text-sky-400 drop-shadow-lg">
-          Novastro Provenance
+    <div className="hero bg-gray-900 min-h-screen flex items-center justify-center">
+      <div className="text-center space-y-10 px-4">
+        <h1 className="hero-title text-sky-400 drop-shadow-2xl animate-slide-in">
+          Novastro Asset Gallery 
         </h1>
         <div className="space-y-6">
-          <h2 className="hero-subtitle text-gray-200">
-            Unleash the power of onchain provenance. Track assets with milestones—repairs, ownership changes, and sales—through an interactive timeline.
-          </h2>
-          <p className="text-lg md:text-xl font-light text-gray-400 max-w-xl mx-auto">
-            Start your journey today and bring your assets to life on the blockchain.
+          <p className="hero-subtitle text-gray-300 max-w-md mx-auto">
+            Transform real-world assets into living onchain profiles. Track milestones like repairs, ownership, and sales with an interactive timeline.
+          </p>
+          <p className="text-base text-gray-350 max-w-sm mx-auto">
+            Join the future of asset provenance on the blockchain.
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <Link href="/login" className="btn btn-primary">
-            Connect Wallet
-          </Link>
-          <Link href="/gallery" className="btn btn-secondary">
-            Explore Gallery
-          </Link>
-        </div>
+        <Link
+          href="/login"
+          className="btn btn-primary relative overflow-hidden group"
+        >
+          <span className="relative z-10">Connect Wallet</span>
+          <span className="absolute inset-0 bg-sky-500 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></span>
+        </Link>
       </div>
     </div>
   );
