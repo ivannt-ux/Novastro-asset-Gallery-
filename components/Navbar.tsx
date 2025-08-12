@@ -42,8 +42,8 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="navbar bg-gray-900 shadow-md py-6 px-6 mt-6 sticky top-0 z-50 animate-fade-in">
-      <div className="max-w-6xl mx-auto flex items-center justify-around">
+    <nav className="navbar bg-gray-900 shadow-md py-6 px-6 mt-8 sticky top-0 z-50 animate-fade-in">
+      <div className="max-w-7xl mx-auto flex items-center justify-between space-x-12">
         <Link href="/" className="navbar-title text-yellow-800 font-extrabold text-2xl tracking-wide">
           Novastro
         </Link>
