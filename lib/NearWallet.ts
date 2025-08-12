@@ -15,7 +15,7 @@ export async function initNear() {
   if (!selector) {
     selector = await setupWalletSelector({
       network: "testnet",
-      modules: [setupNearWallet()],
+      modules: [setupMyNearWallet()],
     });
 
     modal = setupModal(selector, { contractId: "example-contract.testnet" });
