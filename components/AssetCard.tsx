@@ -1,35 +1,15 @@
-// components/AssetCard.tsx
-import Link from "next/link";
-
-export interface Asset {
-  id: string;
-  name: string;
-  description?: string;
-  image?: string;
-}
+import { Asset } from "@/lib/types"; // Define an Asset type if not already present
 
 interface AssetCardProps {
-  asset: Asset; // ✅ Define the asset prop
+  asset: Asset;
 }
 
 export default function AssetCard({ asset }: AssetCardProps) {
   return (
-    <div className="border rounded p-4 shadow-sm bg-white">
-      {asset.image && (
-        <img
-          src={asset.image}
-          alt={asset.name}
-          className="w-full h-48 object-cover mb-2 rounded"
-        />
-      )}
-      <h2 className="text-lg font-semibold">{asset.name}</h2>
-      {asset.description && (
-        <p className="text-sm text-gray-500">{asset.description}</p>
-      )}
-      <Link
-        href={`/assets/${asset.id}`}
-        className="inline-block mt-2 text-blue-600 hover:underline"
-      >
+    <div className="bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+      <h3 className="text-lg font-semibold text-purple-400">{asset.name}</h3>
+      <p className="text-gray-300 mt-2">{asset.description}</p>
+      <Link href={`/assets/${asset.id}`} className="text-purple-400 hover:underline mt-4 inline-block">
         View Details
       </Link>
     </div>
