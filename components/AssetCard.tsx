@@ -1,4 +1,5 @@
 import { Asset } from "@/lib/types";
+import Link from "next/link";
 
 interface AssetCardProps {
   asset: Asset;
