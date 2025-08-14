@@ -2,16 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom CSS variables */
+:root {
+  --blue-light: #3ABEFF;    /* Light blue accent */
+  --blue-medium: #1475C2;  /* Medium blue for gradients */
+  --blue-dark: #0A2342;    /* Dark blue base */
+  --muted-brown: #8B4513;  /* Muted brown for navbar text */
+  --sky-blue: #38bdf8;     /* Sky blue from previous requests */
+  --navy-black: #0f172a;   /* Navy black from previous requests */
+}
+
 /* Global reset & typography */
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Montserrat', sans-serif; /* Montserrat with bold weights */
-  background-color: #0f172a; /* Navy black */
-  color: #e2e8f0; /* Light gray text */
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADYSURBVHgBjZJBEsMgDARtP7/8/P+AAJ8AhG6v7u46uS+Z2wZsaU2VmTVuLl6L9pIb+9dK8bMyF4zsSMmY8nO8/DCCGS7Gws9KEZ8uL4GCgQoxJg6VN+32rL6T9eRYbCaKfKjOG1fpiXJuWqVYxppb6DcmhJObaxBBUjtM+ae36/4nD6Xj0J7+nxX0D4iHMM/DuYoQ6u+v9fY5GfX0mAwEtsuLs3X3em4zN9Xs5aoqV/n9T5J1LiXwDA4P34ynQJAAAAAElFTkSuQmCC'); /* Subtle texture */
-  background-repeat: repeat;
+  min-height: 100vh;
+  font-family: 'Montserrat', sans-serif; /* Align with previous Montserrat usage */
+  background: radial-gradient(ellipse at bottom, var(--blue-dark) 0%, var(--blue-medium) 100%);
+  color: white;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1; /* Lower z-index to avoid overlaying content */
+  background: url("data:image/svg+xml;utf8,<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><circle cx='20' cy='20' r='1.5' fill='white' /><circle cx='70' cy='40' r='1' fill='white' /><circle cx='50' cy='80' r='.7' fill='white' /></svg>") repeat;
+  opacity: 0.22;
 }
 
 a {
@@ -80,6 +104,14 @@ a {
   @apply text-xl md:text-2xl font-medium max-w-2xl mx-auto mb-10 text-gray-300 animate-fade-in;
 }
 
+/* Card styles */
+.card {
+  @apply bg-gradient-to-br from-blue-light to-blue-medium rounded-lg shadow-lg p-6;
+  background: linear-gradient(135deg, var(--blue-light), var(--blue-medium));
+  box-shadow: 0 0 20px 2px rgba(10, 35, 66, 0.73);
+  color: white;
+}
+
 /* Button styles */
 .btn {
   @apply px-6 py-3 rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105;
@@ -91,4 +123,15 @@ a {
 
 .btn-secondary {
   @apply bg-gray-800 border border-gray-700 hover:bg-gray-700 text-white px-4 py-2 text-sm rounded-full;
+}
+
+button {
+  @apply bg-blue-light text-blue-dark border-none rounded-lg px-5 py-2 font-bold shadow-md hover:shadow-lg cursor-pointer transition-colors duration-200;
+  background: var(--blue-light);
+  box-shadow: 0 2px 8px rgba(20, 117, 194, 0.38);
+}
+
+button:hover {
+  background: var(--blue-medium);
+  color: white;
 }
